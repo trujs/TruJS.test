@@ -1,0 +1,89 @@
+[{
+    "type": "module"
+    , "name": "TruJS.test"
+    , "version": "0.0.1"
+    , "description": "The unit/functional test runner for TruJS project test files"
+
+    , "hints": {
+        "TruJS": "{repos}/TruJS"
+    }
+
+    , "module": {
+        "global": [":global"]
+        , "document": [":require(\"min-document\")"]
+        , "XMLHttpRequest": [":require(\"w3c-xmlhttprequest\").XMLHttpRequest"]
+    }
+
+    , "format": "node"
+
+    , "output": "./build/{name}/index.js"
+}, {
+    "type": "javascript"
+    , "name": "TruJS.test"
+    , "description": "This is the TruJS.test command line untility"
+
+    , "files": [
+        "../cli.js"
+    ]
+
+    , "format": "none"
+
+    , "output": "./build/{name}/cli.js"
+}, {
+    "type": "module"
+    , "name": "TruJS.test"
+    , "version": "0.0.1"
+    , "description": "The unit/functional test runner for TruJS project test files"
+    , "copywrite": true
+
+    , "hints": {
+        "TruJS": "{repos}/TruJS"
+    }
+
+    , "module": {
+        "global": [":window"]
+        , "document": [":document"]
+        , "XMLHttpRequest": [":XMLHttpRequest"]
+        , "resultGrid": ["TruJS.test.display._ResultGridFactory", []]
+        , "progressBar": ["TruJS.test.display._ProgressBarFactory", []]
+    }
+
+    , "format": "browser"
+    , "minify": false
+    , "namespace": "TruJSTest"
+
+    , "output": "./build/{name}/app.js"
+}, {
+    "type": "files"
+    , "name": "TruJS.test"
+    , "description": "This script executes the test runner for browsers"
+
+    , "files": [
+        "../browser-run.js"
+        , "+../*resources/*"
+    ]
+
+    , "format": "browser"
+    , "minify": false
+
+    , "output": "./build/{name}/"
+}, {
+    "type": "test"
+    , "name": "TruJS.test"
+    , "description": "The test package for node"
+
+    , "format": "node"
+
+    , "output": "./build/{name}.test/node-test.json"
+}, {
+    "type": "test"
+    , "name": "TruJS.test"
+    , "description": "The test package for browser"
+
+    , "format": "browser"
+    , "moduleFile": "../TruJS.test/app.js"
+    , "moduleName": "TruJSTest"
+    , "testFile": "browser-test.js"
+
+    , "output": "./build/{name}.test"
+}]
