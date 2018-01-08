@@ -15,7 +15,6 @@ function _HasBeenCalledWithArg(isMockCallback, isGetValue) {
     * @return {boolean}
     */
     return function HasBeenCalledWithArg(cb, num, index, arg) {
-
       //they could have called this without a call number, so set it to 0
       if (arg === undefined) {
         arg = index;
@@ -26,6 +25,10 @@ function _HasBeenCalledWithArg(isMockCallback, isGetValue) {
       //see if this is a get value wrapper
       if (isGetValue(arg)) {
         arg = arg();
+      }
+
+      if (!cb) {
+          return [false, ["The value must be a callback to use the HasBeenCalledWithArg assertion"], arg];
       }
 
       if (!isMockCallback(cb)) {

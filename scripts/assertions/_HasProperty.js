@@ -13,7 +13,7 @@ function _HasProperty() {
   * @return {boolean}
   */
   return function HasProperty(value, name) {
-    if (typeof (value) !== 'object') {
+    if (!isObject(value) && !isArray(value) && !isFunc(value)) {
       return [false, ["The value must be an object to run the HasProperty assertion.", name]];
     }
 

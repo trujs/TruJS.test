@@ -1,89 +1,140 @@
-[{
-    "type": "module"
-    , "name": "TruJS.test"
-    , "version": "0.0.1"
-    , "description": "The unit/functional test runner for TruJS project test files"
+{
+    "name": "TruJS.test"
+    , "version": "0.1.1"
 
-    , "hints": {
-        "TruJS": "{repos}/TruJS"
-    }
+    , "entries": [
+        {
+            "type": "module"
+            , "description": "The unit/functional test runner for TruJS project test files"
 
-    , "module": {
-        "global": [":global"]
-        , "document": [":require(\"min-document\")"]
-        , "XMLHttpRequest": [":require(\"w3c-xmlhttprequest\").XMLHttpRequest"]
-    }
+            , "hints": {
+                "TruJS": "{repos}/TruJS"
+            }
 
-    , "format": "node"
+            , "module": {
+                "global": [":global"]
+                , "nodeRequire": [":require"]
+                , "nodeProcess": [":process"]
+                , "nodeModule": [":module"]
+                , "nodeDirname": [":__dirname"]
+                , "document": [":require(\"min-document\")"]
+                , "xmlHttpRequest": [":require(\"w3c-xmlhttprequest\").XMLHttpRequest"]
+                , "run": ["TruJS.test._Run", []]
+            }
 
-    , "output": "./build/{name}/index.js"
-}, {
-    "type": "javascript"
-    , "name": "TruJS.test"
-    , "description": "This is the TruJS.test command line untility"
+            , "format": "node"
 
-    , "files": [
-        "../cli.js"
+            , "package": {
+                "dependencies": {
+                    "trujs-cmdargs": "0.0.3"
+                    , "body-parser": "^1.18.2"
+                    , "min-document": "^2.19.0"
+                    , "w3c-xmlhttprequest": "^2.1.2"
+                }
+                , "keywords": [
+                  "TruJS"
+                  , "compile"
+                  , "assemble"
+                ]
+                , "repository": {
+                  "type": "git"
+                  , "url": "git+https://github.com/trujs/TruJS.test.git"
+                }
+                , "author": "Rodger McIntosh"
+                , "license": "MIT"
+                , "bugs": {
+                  "url": "https://github.com/trujs/TruJS.test/issues"
+                }
+                , "homepage": "https://github.com/trujs/TruJS.test#readme"
+            }
+
+            , "output": "./builds/{name}/index.js"
+        }
+        , {
+            "type": "test"
+            , "description": "The test package for both node and browser"
+
+            , "format": "node"
+
+            , "output": "./builds/{name}/"
+        }
+        , {
+            "type": "javascript"
+            , "description": "This is the TruJS.test command line untility"
+
+            , "files": [
+                "../cli.js"
+            ]
+
+            , "format": "none"
+
+            , "output": "./builds/{name}/cli.js"
+        }
+        , {
+            "type": "files"
+            , "description": "The readme file for the npm package"
+            , "files": [
+                "../README.md"
+            ]
+            , "output": "./builds/{name}/"
+        }
+        , {
+            "type": "module"
+            , "description": "The unit/functional test runner for TruJS project test files"
+
+            , "hints": {
+                "TruJS": "{repos}/TruJS"
+            }
+
+            , "module": {
+                "global": [":window"]
+                , "nodeRequire": null
+                , "nodeProcess": null
+                , "nodeModule": null
+                , "nodeDirname": null
+                , "document": [":document"]
+                , "xmlHttpRequest": [":XMLHttpRequest"]
+                , "httpRequest": ["TruJS.test.delivery._HttpRequest", []]
+                , "resultGrid": ["TruJS.test.display._ResultGridFactory", []]
+                , "progressBar": ["TruJS.test.display._ProgressBarFactory", []]
+            }
+
+            , "format": "browser"
+            , "minify": false
+            , "namespace": "TruJSTest"
+
+            , "output": "./builds/{name}/public/app.js"
+        }
+        , {
+            "type": "test"
+            , "description": "The test package for the browser"
+
+            , "format": "browser"
+
+            , "output": "./builds/{name}/"
+        }
+        , {
+            "type": "routing"
+            , "description": "This is the test web server module"
+
+            , "format": "node"
+
+            , "output": "./builds/{name}/server.js"
+        }
+        , {
+            "type": "files"
+            , "description": "This script executes the test runner for browsers"
+
+            , "files": [
+                "+../*resources/*"
+                , "../browser-run.js"
+                , "./index.html"
+            ]
+
+            , "format": "browser"
+            , "minify": false
+
+            , "output": "./builds/{name}/public/"
+        }
     ]
-
-    , "format": "none"
-
-    , "output": "./build/{name}/cli.js"
-}, {
-    "type": "module"
-    , "name": "TruJS.test"
-    , "version": "0.0.1"
-    , "description": "The unit/functional test runner for TruJS project test files"
-    , "copywrite": true
-
-    , "hints": {
-        "TruJS": "{repos}/TruJS"
-    }
-
-    , "module": {
-        "global": [":window"]
-        , "document": [":document"]
-        , "XMLHttpRequest": [":XMLHttpRequest"]
-        , "resultGrid": ["TruJS.test.display._ResultGridFactory", []]
-        , "progressBar": ["TruJS.test.display._ProgressBarFactory", []]
-    }
-
-    , "format": "browser"
-    , "minify": false
-    , "namespace": "TruJSTest"
-
-    , "output": "./build/{name}/app.js"
-}, {
-    "type": "files"
-    , "name": "TruJS.test"
-    , "description": "This script executes the test runner for browsers"
-
-    , "files": [
-        "../browser-run.js"
-        , "+../*resources/*"
-    ]
-
-    , "format": "browser"
-    , "minify": false
-
-    , "output": "./build/{name}/"
-}, {
-    "type": "test"
-    , "name": "TruJS.test"
-    , "description": "The test package for node"
-
-    , "format": "node"
-
-    , "output": "./build/{name}.test/node-test.json"
-}, {
-    "type": "test"
-    , "name": "TruJS.test"
-    , "description": "The test package for browser"
-
-    , "format": "browser"
-    , "moduleFile": "../TruJS.test/app.js"
-    , "moduleName": "TruJSTest"
-    , "testFile": "browser-test.js"
-
-    , "output": "./build/{name}.test"
-}]
+}

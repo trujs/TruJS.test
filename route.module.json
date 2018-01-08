@@ -1,0 +1,9 @@
+{
+    "root": [{}]
+    , "nodeBodyParser": [":require('body-parser')"]
+    , "testProxy": {
+        "data": null
+        , "done": null
+        , "run": true
+    }
+}
