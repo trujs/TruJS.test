@@ -14,7 +14,6 @@ function _HasBeenCalledWithScope(isMockCallback, isGetValue) {
   * @return {boolean}
   */
   return function HasBeenCalledWithScope(cb, num, scope) {
-
     //they could have called this without a call number, so set it to 0
     if (scope === undefined) {
         scope = num;
@@ -24,6 +23,10 @@ function _HasBeenCalledWithScope(isMockCallback, isGetValue) {
     //see if this is a get value wrapper
     if (isGetValue(scope)) {
         scope = scope();
+    }
+
+    if (!cb) {
+        return [false, ["The value must be a callback to use the HasBeenCalledWithScope assertion"], scope];
     }
 
     if (!isMockCallback(cb)) {

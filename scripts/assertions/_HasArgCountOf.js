@@ -14,11 +14,14 @@ function _HasArgCountOf(isMockCallback) {
   * @return {boolean}
   */
   return function HasArgCountOf(cb, num, cnt) {
-
     //they could have called this without a call number, so set it to 0
     if (cnt === undefined) {
       cnt = num;
       num = 0;
+    }
+
+    if (!cb) {
+        return [false, ["The value must be a callback to use the HasArgCountOf assertion"], cnt];
     }
 
     //ensure this is a callback

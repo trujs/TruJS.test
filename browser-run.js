@@ -15,14 +15,35 @@ var progress =
 
 var testCount = TruJSTest('.testPackage').count, curTest, perc;
 
+//tell the server we're starting
+TruJSTest(".httpRequest")({
+    "url": "/Starting"
+    , "method": "POST"
+    , "data": {
+        "count": testCount
+    }
+});
 
 //setup the report listener
-TruJSTest('.testReporter').setListener(function (type, entry) {
+TruJSTest('.testReporter').setLevels("all");
+TruJSTest('.testReporter').addHandler(function (entry, type) {
     //if this is a test then store the test
     if (type === 'end-test') {
         curTest = entry;
         perc = (curTest.index + 1) / testCount;
         perc = perc * 100;
+        //tell the server what percent we're at
+        TruJSTest(".httpRequest")({
+            "url": "/Running"
+            , "method": "POST"
+            , "data": {
+                "percent": perc
+                , "title": curTest.title
+            }
+        });
+    }
+    else if (type === 'start-test') {
+        curTest = entry;
     }
     else if (type === 'end-iteration') {
         progress.update((curTest.index + 1) + ':' + curTest.title + ' (' + (entry.iteration + 1) + ')', perc);
@@ -31,7 +52,6 @@ TruJSTest('.testReporter').setListener(function (type, entry) {
         progress.update('Finalizing', 100);
     }
 });
-
 
 //run the tests
 TruJSTest('.testPackage')
@@ -45,7 +65,42 @@ TruJSTest('.testPackage')
         //remove the progress bar
         progress.destroy();
         //display the results
-        TruJSTest.resolveName('.resultGrid')
+        TruJSTest('.resultGrid')
             ({ results: results, target: 'body' })
             .show();
+
+        //deliver the results
+        TruJSTest(".httpRequest")({
+            "url": "/Results"
+            , "method": "POST"
+            , "data": results
+        });
+
+        //start the run listner loop
+        if (vals.hasOwnProperty("watch")) {
+            runListener();
+        }
     });
+
+//a interval loop the calls the server to see if it should run again
+function runListener() {
+    var delay = 1000;
+    setTimeout(check, delay);
+    function check() {
+        TruJSTest(".httpRequest")({
+            "url": "/Run"
+            , "method": "GET"
+            , "cb": function (err, data) {
+                err !== null && (delay = 10000) || (delay = 1000);
+                if (err === null || vals.hasOwnProperty("persist")) {
+                    if (!!data && data.run) {
+                        location.reload();
+                    }
+                    else {
+                        setTimeout(check, delay);
+                    }
+                }
+            }
+        });
+    }
+}
