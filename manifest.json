@@ -1,6 +1,6 @@
 {
     "name": "TruJS.test"
-    , "version": "0.1.0"
+    , "version": "0.1.1"
 
     , "entries": [
         {
@@ -31,16 +31,21 @@
                     , "min-document": "^2.19.0"
                     , "w3c-xmlhttprequest": "^2.1.2"
                 }
+                , "keywords": [
+                  "TruJS"
+                  , "compile"
+                  , "assemble"
+                ]
                 , "repository": {
-                  "type": "git",
-                  "url": "git+https://github.com/trujs/TruJS.test.git"
-                },
-                "author": "Rodger McIntosh",
-                "license": "MIT",
-                "bugs": {
+                  "type": "git"
+                  , "url": "git+https://github.com/trujs/TruJS.test.git"
+                }
+                , "author": "Rodger McIntosh"
+                , "license": "MIT"
+                , "bugs": {
                   "url": "https://github.com/trujs/TruJS.test/issues"
-                },
-                "homepage": "https://github.com/trujs/TruJS.test#readme"
+                }
+                , "homepage": "https://github.com/trujs/TruJS.test#readme"
             }
 
             , "output": "./builds/{name}/index.js"

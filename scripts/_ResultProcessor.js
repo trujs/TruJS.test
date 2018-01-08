@@ -78,7 +78,7 @@ function _ResultProcessor() {
 
         //add the number of asserts
         result.assertions = !!test.iterations[0] && !!test.iterations[0].assertions && test.iterations[0].assertions.length || 0;
-
+        test.exception = convertException(test.exception);
         !!test.exception && (result.exception = test.exception);
 
         //loop through the results
@@ -180,7 +180,7 @@ function _ResultProcessor() {
                 , "total": (iteration.arrange + iteration.act + iteration.assert) || 0
             }
             , "assertions": iteration.assertions || []
-            , "exception": iteration.exception
+            , "exception": convertException(iteration.exception)
         };
     }
     /**
@@ -194,6 +194,18 @@ function _ResultProcessor() {
         return assert.every(function(val) {
             return val.pass;
         });
+    }
+    /**
+    * Converts an exception to a an object that can be stringify
+    * @function
+    */
+    function convertException(exception) {
+        if (!!exception) {
+            return {
+                "message": exception.message
+                , "stack": exception.stack
+            };
+        }
     }
 
     /**

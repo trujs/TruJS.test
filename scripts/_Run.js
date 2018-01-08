@@ -63,16 +63,25 @@ function _Run(promise, nodePath, nodeFs, nodeRequire, errors, defaults, testPack
 
       //a function that shuts down the server and watcher
       function shutdown(err, results) {
-          //stop the server
-          if (!!server) {
-              testReporter.info("* Stopping Web Server *");
-              server.instance.close();
-          }
           //stop the watcher
           if (!!watcher) {
               testReporter.info("* Stopping the file watcher *");
               watcher.close();
           }
+          //stop the server
+          if (!!server) {
+              testReporter.info("* Stopping Web Server *");
+              server.instance.close(function () {
+                  testReporter.info("* Web Server Stopped *");
+                  finalize(err, results);
+              });
+          }
+          else {
+              finalize(err, results);
+          }
+      }
+      //
+      function finalize(err, results) {
           if (!!err) {
               reject(err);
           }
@@ -256,23 +265,24 @@ function _Run(promise, nodePath, nodeFs, nodeRequire, errors, defaults, testPack
   function startServer(resolve, reject, cmdArgs) {
       try {
           var server = nodeRequire("./server.js")
-          , test = server(".testProxy")
-          , port = (cmdArgs.serve = cmdArgs.serve || 3000)
-          , url = test.url = getBrowserUrl(cmdArgs);
+          , test, port = (cmdArgs.serve = cmdArgs.serve || 3000);
 
           //link the reporters
           server.setEntry("routeReporter", testReporter);
           server.setEntry("cmdArgs", cmdArgs);
+
+          test = server(".testProxy");
+          test.url = getBrowserUrl(cmdArgs);
 
           //resolve the serve worker
           //start the server
           server(".$serve$")({ "port": port })
           .then(function (appList) {
               //set the node http server instance so we can close later
-              test.instance = appList.testapp.instance;
+              test.instance = appList.testapp.server;
 
               testReporter.info("* Web server running on port: " + port + " *");
-              testReporter.info(url);
+              testReporter.info("  " + test.url);
 
               resolve(test);
           })
@@ -387,7 +397,7 @@ function _Run(promise, nodePath, nodeFs, nodeRequire, errors, defaults, testPack
                       testReporter.group("iteration:" + i);
                   }
 
-                  if (!iterations[i].exception) {
+                  if (!iterations[i].exception || isEmpty(iterations[i].exception)) {
                       var assertions = iterations[i].assertions;
                       for (var a = 0, al = assertions.length; a < al; a++) {
                           testReporter.group("assertion:" + i);
