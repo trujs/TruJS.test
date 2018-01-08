@@ -2,7 +2,7 @@
 * Takes an array of test resolvers and resolves then runs each test for each iteration
 * @factory
 */
-function _Runner(testReporter, testAssertion, testResultProcessor, promise, getValue, setTimeout, async, arrayPrune, log, performance) {
+function _Runner(testReporter, testAssertion, testResultProcessor, promise, getValue, setTimeout, async, arrayPrune, performance) {
 
     /**
     * Creates the promise chain for each test and appends the final
@@ -239,7 +239,7 @@ function _Runner(testReporter, testAssertion, testResultProcessor, promise, getV
         }
         else if (token.isDone === true) {
             token.isDone = 'overdone';
-            !!log && log.error('runAct: overdone', new Error('The done function was called additional times from "' + token.testObj.title + '"'));
+            testReporter.error('runAct: overdone', new Error('The done function was called additional times from "' + token.testObj.title + '"'));
         }
     }
     /**

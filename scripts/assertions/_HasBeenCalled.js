@@ -13,6 +13,9 @@ function _HasBeenCalled(isMockCallback) {
   * @return {boolean}
   */
   return function HasBeenCalled(cb, cnt) {
+    if (!cb) {
+        return [false, ["The value must be a callback to use the HasBeenCalled assertion"], cnt];
+    }
     if (!isMockCallback(cb)) {
       return [false, ["The value must be a callback to use the HasBeenCalled assertion", cnt]];
     }

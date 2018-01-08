@@ -13,7 +13,7 @@ function _HasPropertyCountOf() {
   * @return {boolean}
   */
   return function HasPropertyCountOf(value, cnt) {
-    if (typeof value !== "object") {
+    if (!isObject(value) && !isArray(value) && !isFunc(value)) {
       return [false, ["The value must be an object to use the HasPropertyCountOf assertion.", cnt]];
     }
 

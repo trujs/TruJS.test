@@ -2,7 +2,7 @@
 *
 * @factory
 */
-function _Package(testResolver, testDependencies, testArray) {
+function _Package(testResolver, testDependencies, testArray, global, document, nodeRequire, nodeProcess, nodeModule, nodeDirname) {
     /**
     * @property
     */
@@ -33,7 +33,25 @@ function _Package(testResolver, testDependencies, testArray) {
 
           //we're expecting the value to be stringified
           try {
-            var value = eval("(function() { return " + test.value + " })();");
+            var fnBody = "return " + test.value
+            , fnArgs = ["window","document","global","require","process","module","__dirname", fnBody]
+            , mockWindow = global
+            , mockDocument = document
+            , mockGlobal = global
+            , mockRequire = nodeRequire
+            , mockNodeProcess = nodeProcess
+            , mockNodeModule = nodeModule
+            , mockNodeDirname = nodeDirname
+            , func = Function.apply(global, fnArgs)
+            , value = func(
+                mockWindow
+                , mockDocument
+                , mockGlobal
+                , mockRequire
+                , mockNodeProcess
+                , mockNodeModule
+                , mockNodeDirname
+            );
           }
           catch(ex) {
             throw new Error("Failed to parse test \"" + (test.title || test.label) + "\"\n" + ex.message);

@@ -397,12 +397,13 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
   */
   function massageArg(arg) {
       var val = arg;
-      //if val has a tostring method then run it
-      val = !isNill(val) && !!val.toString && val.toString() || Object.prototype.toString.apply(val);
       //if the result is a string
       if (typeof (val) === 'string') {
           val = '"' + val + '"';
       }
+      //if val has a tostring method then run it
+      val = !isNill(val) && !!val.toString && val.toString() || (val + "");
+
       switch (val) {
           case 0:
               val = '0';
