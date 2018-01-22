@@ -44,7 +44,7 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
       elementHelper.create({
           "tag": 'div'
           , "target": el
-          , "class": ((!results.success) ? 'bg-danger' : 'bg-success')
+          , "class": ((!results.success) ? 'list-group-item-danger' : 'list-group-item-success')
           , "style": [
               'margin-bottom:10px'
               , 'padding:8px'
@@ -75,8 +75,8 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
                       ]
                       , "class": 'gs-test-run'
                   }, {
-                          "tag": 'div'
-                      , "class": 'panel-title text-right'
+                      "tag": 'div'
+                      , "class": 'text-right'
                       , "style": [
                           'margin-right:10px'
                           , 'font-family: monospace'
@@ -94,7 +94,7 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
                       , "class": 'gs-test'
                   }, {
                       "tag": 'div'
-                      , "class": 'panel-title text-right'
+                      , "class": 'text-right'
                       , "style": [
                           'margin-right:10px'
                           , 'font-family: monospace'
@@ -112,7 +112,7 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
                       , "class": 'gs-test-failed'
                   }, {
                       "tag": 'div'
-                      , "class": 'panel-title text-right'
+                      , "class": 'text-right'
                       , "style": [
                           'font-family: monospace'
                       ]
@@ -161,19 +161,19 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
       return elementHelper.create({
           "tag": 'div'
           , "target": el
-          , "class": 'panel panel-default' + (test.success && (!!test.assertions && ' panel-success' || ' panel-info') || ' panel-danger')
+          , "class": 'card' + (test.success && (!!test.assertions && ' list-group-item-success' || ' list-group-item-info') || ' list-group-item-danger')
           , "style": [
               'overflow:hidden'
               , 'margin-bottom:10px'
-              , 'height:34px'
           ]
           , "children": [{
               "tag": 'div'
-              , "class": 'panel-heading'
+              , "class": 'card-header'
               , "style": [
                   'display:flex'
                   , 'cursor:pointer'
                   , 'padding:4px'
+                  , 'height: 34px'
               ]
               , "listeners": {
                   "click": toggleTestPanel
@@ -186,7 +186,7 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
                   ]
               }, {
                   "tag": 'div'
-                  , "class": 'panel-title'
+                  , "class": ''
                   , "style": [
                       'flex: 20'
                       , 'line-height:24px'
@@ -207,7 +207,7 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
                   , "class": 'gs-test-time'
               }, {
                   "tag": 'div'
-                  , "class": 'panel-title text-right'
+                  , "class": 'text-right'
                   , "style": [
                       'margin-right:10px'
                       , 'font-family: monospace'
@@ -226,7 +226,7 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
                   , "class": 'gs-test-assert'
               }, {
                   "tag": 'div'
-                  , "class": 'panel-title text-right'
+                  , "class": 'text-right'
                   , "style": [
                       'margin-right:10px'
                       , 'font-family: monospace'
@@ -244,7 +244,7 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
                   , "class": 'gs-test-failed'
               }, {
                   "tag": 'div'
-                  , "class": 'panel-title text-right'
+                  , "class": 'text-right'
                   , "style": [
                       'margin-right:10px'
                       , 'font-family: monospace'
@@ -255,13 +255,12 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
               }]
           }, {
               "tag": 'div'
-              , "class": 'panel-body'
+              , "class": 'card-body hidden'
               , "style": [
                   'overflow:auto'
                   , 'padding:10px 0px 0px 10px'
-                  , 'display:flex'
-                  , 'flex-wrap:wrap'
-                  , 'align-content:stretch'
+                  , 'display: flex'
+                  , 'flex-direction: column'
               ]
           }]
       });
@@ -273,6 +272,7 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
   function toggleTestPanel() {
       var pnl = this.parentElement
       , test = pnl.test
+      , header = pnl.children[0]
       , body = pnl.children[1]
       ;
       //set the panel toggle
@@ -290,8 +290,8 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
       else {
           body.innerHTML = '';
       }
-      classHelper.toggle(pnl, 'dropup');
-      pnl.style.height = !pnl.style.height && '34px' || null;
+      classHelper.toggle(body, 'hidden');
+      header.style.height = !header.style.height && '34px' || null;
   };
   /**
   * Creates an entry for the test assert
@@ -303,8 +303,7 @@ function _ResultGridFactory(elementHelper, classHelper, htmlEncoder) {
           "tag": 'div'
           , "target": el
           , "class": [
-              'panel'
-              , 'panel-default'
+              'card'
           ]
           , "style": [
               'padding:10px 10px 0px 10px'
