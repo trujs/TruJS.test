@@ -51,7 +51,18 @@ TruJSTest('.testReporter').addHandler(function (entry, type) {
     else if (type === 'finished') {
         progress.update('Finalizing', 100);
     }
+    else if (type !== 'start-iteration') {
+        //pass the console log entries to the server
+        TruJSTest(".httpRequest")({
+            "url": "/Log"
+            , "method": "POST"
+            , "data": entry
+        });
+    }
 });
+
+//change the global console to use the test reporter
+console = TruJSTest('.testReporter');
 
 //run the tests
 TruJSTest('.testPackage')
@@ -91,7 +102,7 @@ function runListener() {
             "url": "/Run"
             , "method": "GET"
             , "cb": function (err, data) {
-                err !== null && (delay = 10000) || (delay = 1000);
+                //err !== null && (delay = 10000) || (delay = 1000);
                 if (err === null || vals.hasOwnProperty("persist")) {
                     if (!!data && data.run) {
                         location.reload();
