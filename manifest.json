@@ -1,15 +1,20 @@
 {
     "name": "TruJS.test"
-    , "version": "0.1.1"
+    , "version": "0.1.3"
 
     , "entries": [
         {
             "type": "module"
             , "description": "The unit/functional test runner for TruJS project test files"
 
-            , "hints": {
-                "TruJS": "{repos}/TruJS"
-            }
+            , "repos": [
+                {
+                    "type": "git"
+                    , "name": "TruJS"
+                    , "url": "https://github.com/trujs/TruJS.git"
+                    , "branch": "version-0.1"
+                }
+            ]
 
             , "module": {
                 "global": [":global"]
@@ -59,32 +64,28 @@
             , "output": "./builds/{name}/"
         }
         , {
-            "type": "javascript"
-            , "description": "This is the TruJS.test command line untility"
+            "type": "files"
+            , "description": "This is the TruJS.test command line untility and read me file"
 
             , "files": [
                 "../cli.js"
+                , "../README.md"
             ]
 
-            , "format": "none"
-
-            , "output": "./builds/{name}/cli.js"
-        }
-        , {
-            "type": "files"
-            , "description": "The readme file for the npm package"
-            , "files": [
-                "../README.md"
-            ]
             , "output": "./builds/{name}/"
         }
         , {
             "type": "module"
             , "description": "The unit/functional test runner for TruJS project test files"
 
-            , "hints": {
-                "TruJS": "{repos}/TruJS"
-            }
+            , "repos": [
+                {
+                    "type": "git"
+                    , "name": "TruJS"
+                    , "url": "https://github.com/trujs/TruJS.git"
+                    , "branch": "version-0.1"
+                }
+            ]
 
             , "module": {
                 "global": [":window"]
@@ -126,7 +127,10 @@
             , "description": "This script executes the test runner for browsers"
 
             , "files": [
-                "+../*resources/*"
+                "+../+resources/*"
+                , "^{resources}/bootstrap/css/bootstrap.min.css"
+                , "^{resources}/font-awesome/css/font-awesome.min.css"
+                , "^{resources}/font-awesome/fonts/*"
                 , "../browser-run.js"
                 , "./index.html"
             ]

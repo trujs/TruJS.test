@@ -1,4 +1,4 @@
-/**[@route({ "label":"testapp", "type":"app", "path":"/", "static": ["/public"], "routers": ["results","starting","running","run"], "middleware": ["jsonbodyparser","error"] })]*/
+/**[@route({ "label":"testapp", "type":"app", "path":"/", "static": ["/public"], "routers": ["results","starting","running","run","log"], "middleware": ["jsonbodyparser","error"] })]*/
 function _EntryPoint(testProxy) {
 
     /**
