@@ -299,13 +299,22 @@ function _Runner(testReporter, testAssertion, testResultProcessor, promise, getV
                 return parseInt(val);
             });
         }
+        if (isString(config.iterations)) {
+            config.iterations = parseInt(config.iterations);
+        }
+        if (isString(config.prime)) {
+             config.prime = config.prime !== "false";
+        }
+        if (isNill(config.prime)) {
+            config.prime = true;
+        }
 
         //create the config object if missing
         //apply the default values if missing
         return applyIf({
             "testNums": 'all'
             , "iterations": 1
-            , "prime": config.prime !== 'false'
+            , "prime": config.prime
         }, config || {});
     }
 

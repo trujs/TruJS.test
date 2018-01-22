@@ -6,7 +6,7 @@ function _Package(testResolver, testDependencies, testArray, global, document, n
     /**
     * @property
     */
-    var tests = testArray || []
+    var packageTests = testArray || []
     /**
     *  A collection of dependency entries, with the external `testDependencies` object as the prototype
     *   name: {the unique name of the dependency}
@@ -28,6 +28,8 @@ function _Package(testResolver, testDependencies, testArray, global, document, n
     * @function
     */
     function init(tests) {
+      dependencies = testDependencies || Object.create(null);
+      packageTests.length = 0;
       if (isArray(tests)) {
         tests.forEach(function forEachTest(test) {
 
@@ -113,7 +115,7 @@ function _Package(testResolver, testDependencies, testArray, global, document, n
     */
     function add(title, test) {
         var me = this;
-        tests.push({
+        packageTests.push({
             "title": title
             , "factory": test
         });
@@ -124,7 +126,7 @@ function _Package(testResolver, testDependencies, testArray, global, document, n
     * @function
     */
     function resolve() {
-        return testResolver(dependencies, tests);
+        return testResolver(dependencies, packageTests);
     }
 
     /**
@@ -149,7 +151,7 @@ function _Package(testResolver, testDependencies, testArray, global, document, n
         }
         , "count": {
             "enumerable": true
-            , "get": function getCount() { return tests.length; }
+            , "get": function getCount() { return packageTests.length; }
         }
     });
 };
