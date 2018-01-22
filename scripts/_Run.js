@@ -3,7 +3,7 @@
 * object, loads the test files and runs it
 * @factory
 */
-function _Run(promise, nodePath, nodeFs, nodeRequire, errors, defaults, testPackage, nodeCwd, testReporter) {
+function _Run(promise, nodePath, nodeFs, nodeRequire, errors, defaults, testPackage, nodeCwd, testReporter, setTimeout) {
   var PATH_PATT = /[./\\]/
   , cnsts = {
       "skipArgs": [
@@ -28,7 +28,6 @@ function _Run(promise, nodePath, nodeFs, nodeRequire, errors, defaults, testPack
       try {
           var watch = cmdArgs.hasOwnProperty("watch"), watcher
           , running = true;
-
           //setup the watcher
           if (watch) {
               testReporter.report("seperator","");
@@ -40,7 +39,8 @@ function _Run(promise, nodePath, nodeFs, nodeRequire, errors, defaults, testPack
                       running = true;
                       testReporter.info("* Change detected, starting tests *");
                       testReporter.report("seperator","");
-                      executeTest(cmdArgs, server, done);
+                      //give the files system time to catch up
+                      setTimeout(executeTest, 1000, cmdArgs, server, done);
                   }
               });
           }
@@ -53,6 +53,10 @@ function _Run(promise, nodePath, nodeFs, nodeRequire, errors, defaults, testPack
               running = false;
               if (!watch || !!err) {
                   shutdown(err, results);
+              }
+              else {
+                  testReporter.report("seperator","");
+                  testReporter.info("* Listening for file changes *");
               }
           }
       }
@@ -240,7 +244,8 @@ function _Run(promise, nodePath, nodeFs, nodeRequire, errors, defaults, testPack
       testReporter.info("* Testing Started *");
 
       //resolve all the tests, start the runner
-      var runner = testPackage.resolve().run(cmdArgs);
+      var config = copy(cmdArgs)
+      , runner = testPackage.resolve().run(config);
 
       resolve(runner);
     }
